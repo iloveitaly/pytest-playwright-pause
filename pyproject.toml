@@ -1,22 +1,26 @@
 [project]
 name = "pytest-playwright-pause"
 version = "0.1.0"
-description = ""
-keywords = []
+description = "Pause Playwright tests before fixture teardown so the inspector still has a live page"
+keywords = ["pytest", "playwright", "debugging", "inspector"]
 readme = "README.md"
 requires-python = ">=3.12"
 classifiers = [
+    "Framework :: Pytest",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
 ]
-dependencies = []
+dependencies = [
+    "pytest-playwright>=0.10.0",
+]
 authors = [{ name = "Michael Bianco", email = "mike@mikebian.co" }]
 urls = { "Repository" = "https://github.com/iloveitaly/pytest-playwright-pause" }
 
-
+[project.entry-points.pytest11]
+playwright_pause = "pytest_playwright_pause.plugin"
 
 [build-system]
 requires = ["uv_build>=0.11.0,<0.14"]
@@ -41,11 +45,12 @@ dev = [
 exclude = ["examples/", "playground/", "tmp/", ".venv/", "tests/"]
 
 [tool.pytest.ini_options]
-addopts = "--cov --cov-report=term-missing --cov-report=html:tmp/htmlcov"
+addopts = "-p no:playwright --runpytest subprocess --cov --cov-report=term-missing --cov-report=html:tmp/htmlcov"
 
 [tool.coverage.run]
 plugins = ["covdefaults"]
 source = ["pytest_playwright_pause"]
+parallel = true
 
 [tool.coverage.report]
 fail_under = 50
